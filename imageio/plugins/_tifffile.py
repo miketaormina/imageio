@@ -8048,20 +8048,28 @@ def read_micromanager_metadata(fh):
     }
 
     if display_header != 483765892:
-        raise ValueError("invalid MicroManager display header")
-    fh.seek(display_offset)
-    header, count = struct.unpack(byteorder + "II", fh.read(8))
+        err = ValueError("invalid MicroManager display header")
+        warnings.warn(f'ValueError: {err.args}')
+    else:
+        fh.seek(display_offset)
+        header, count = struct.unpack(byteorder + "II", fh.read(8))
     if header != 347834724:
-        raise ValueError("invalid MicroManager display header")
-    result["DisplaySettings"] = read_json(fh, byteorder, None, count, None)
+        err = ValueError("invalid MicroManager display header")
+        warnings.warn(f'ValueError: {err.args}')
+    else:
+        result["DisplaySettings"] = read_json(fh, byteorder, None, count, None)
 
     if comments_header != 99384722:
-        raise ValueError("invalid MicroManager comments header")
-    fh.seek(comments_offset)
-    header, count = struct.unpack(byteorder + "II", fh.read(8))
+        err = ValueError("invalid MicroManager comments header")
+        warnings.warn(f'ValueError: {err.args}')
+    else:
+        fh.seek(comments_offset)
+        header, count = struct.unpack(byteorder + "II", fh.read(8))
     if header != 84720485:
-        raise ValueError("invalid MicroManager comments header")
-    result["Comments"] = read_json(fh, byteorder, None, count, None)
+        err = ValueError("invalid MicroManager comments header")
+        warnings.warn(f'ValueError: {err.args}')
+    else:
+        result["Comments"] = read_json(fh, byteorder, None, count, None)
 
     return result
 
